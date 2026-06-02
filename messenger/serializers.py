@@ -6,7 +6,7 @@ from messenger.models import Message, Tag
 class MessageSerializer(serializers.ModelSerializer):
    class Meta:
        model = Message
-       fields = ("id", "text", "created_at")
+       fields = ("id", "text", "created_at", "user")
 
 
 class TagSerializer(serializers.ModelSerializer):
