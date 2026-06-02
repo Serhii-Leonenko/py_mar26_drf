@@ -1,9 +1,14 @@
 from rest_framework import  viewsets
 
 from messenger.models import Message
-from messenger.serializers import MessageSerializer
+from messenger.serializers import MessageListSerializer, MessageDetailSerializer
 
 
 class MessageViewSet(viewsets.ModelViewSet):
-    queryset = Message.objects.all()
-    serializer_class = MessageSerializer
+    queryset = Message.objects.select_related("user")
+
+    def get_serializer_class(self):
+        if self.action == "list":
+            return MessageListSerializer
+
+        return MessageDetailSerializer

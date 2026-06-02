@@ -3,6 +3,8 @@ from django.db import models
 
 
 class Message(models.Model):
+    PREVIEW_LENGTH = 50
+
     text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(
@@ -14,6 +16,13 @@ class Message(models.Model):
 
     def __str__(self):
         return self.text
+
+    @property
+    def text_preview(self):
+        if len(self.text) <= self.PREVIEW_LENGTH:
+            return self.text
+
+        return self.text[:self.PREVIEW_LENGTH] + '...'
 
 
 class Tag(models.Model):
