@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
+from rest_framework.relations import SlugRelatedField
 
 from messenger.models import Message, Tag
 
@@ -12,18 +13,35 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ("id", "username")
 
 
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = ("id", "name")
+
+
+# --------------------------Message-----------------------
 class MessageSerializer(serializers.ModelSerializer):
+    tags = SlugRelatedField(
+        many=True,
+        slug_field="name",
+        queryset=Tag.objects.all()
+    )
+
     class Meta:
         model = Message
         fields = (
             "id",
             "text",
             "user",
-            "created_at"
+            "created_at",
+            "tags"
         )
 
 
 class MessageListSerializer(serializers.ModelSerializer):
+    tags = SlugRelatedField(many=True, slug_field="name", read_only=True)
+    user = serializers.CharField(source="user.username")
+
     class Meta:
         model = Message
         fields = (
@@ -31,14 +49,10 @@ class MessageListSerializer(serializers.ModelSerializer):
             "text_preview",
             "created_at",
             "user",
+            "tags"
         )
 
 
 class MessageDetailSerializer(MessageSerializer):
     user = UserSerializer(many=False)
-
-
-class TagSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Tag
-        fields = ("id", "name")
+    tags = TagSerializer(many=True)
