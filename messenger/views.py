@@ -1,7 +1,7 @@
 from rest_framework import  viewsets
 
 from messenger.models import Message
-from messenger.serializers import MessageListSerializer, MessageDetailSerializer
+from messenger.serializers import MessageListSerializer, MessageDetailSerializer, MessageSerializer
 
 
 class MessageViewSet(viewsets.ModelViewSet):
@@ -11,4 +11,7 @@ class MessageViewSet(viewsets.ModelViewSet):
         if self.action == "list":
             return MessageListSerializer
 
-        return MessageDetailSerializer
+        if self.action == "retrieve":
+            return MessageDetailSerializer
+
+        return MessageSerializer

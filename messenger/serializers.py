@@ -12,24 +12,30 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ("id", "username")
 
 
-class MessageListSerializer(serializers.ModelSerializer):
-    class Meta:
-       model = Message
-       fields = (
-           "id",
-           "created_at",
-           "user",
-           "text_preview"
-       )
-
-
-# for retrieve action
-class MessageDetailSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True)
-
+class MessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
-        fields = ("id", "text", "created_at", "user")
+        fields = (
+            "id",
+            "text",
+            "user",
+            "created_at"
+        )
+
+
+class MessageListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Message
+        fields = (
+            "id",
+            "text_preview",
+            "created_at",
+            "user",
+        )
+
+
+class MessageDetailSerializer(MessageSerializer):
+    user = UserSerializer(many=False)
 
 
 class TagSerializer(serializers.ModelSerializer):
