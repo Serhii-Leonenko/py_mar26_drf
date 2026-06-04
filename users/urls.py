@@ -1,3 +1,10 @@
+from rest_framework.routers import DefaultRouter
+
+from users.views import UserViewSet
+
 app_name = 'users'
 
-urlpatterns = []
+router = DefaultRouter()
+router.register('users', UserViewSet)
+
+urlpatterns = router.urls
