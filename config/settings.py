@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     "django_filters",
     # LOCAL
     "messenger",
+    "users"
 ]
 
 MIDDLEWARE = [
@@ -123,3 +124,5 @@ REST_FRAMEWORK = {
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
+
+AUTH_USER_MODEL = "users.User"
