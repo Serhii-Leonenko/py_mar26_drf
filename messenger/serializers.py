@@ -35,7 +35,8 @@ class MessageSerializer(serializers.ModelSerializer):
             "text",
             "user",
             "created_at",
-            "tags"
+            "tags",
+            "image"
         )
 
 
@@ -50,7 +51,7 @@ class MessageListSerializer(serializers.ModelSerializer):
             "text_preview",
             "created_at",
             "user",
-            "tags"
+            "tags",
         )
 
 

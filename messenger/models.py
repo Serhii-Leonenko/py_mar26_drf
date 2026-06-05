@@ -14,6 +14,7 @@ class Message(models.Model):
         blank=True
     )
     tags = models.ManyToManyField("Tag", blank=True)
+    image = models.ImageField(upload_to='messages/', null=True, blank=True)
 
     def __str__(self):
         return self.text

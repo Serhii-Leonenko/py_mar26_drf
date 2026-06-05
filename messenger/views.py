@@ -1,6 +1,5 @@
-from rest_framework import viewsets, filters, pagination
+from rest_framework import viewsets, filters
 from django_filters import rest_framework as drf_filters
-from rest_framework.authentication import TokenAuthentication
 
 from messenger.filters import MessageFilter
 from messenger.models import Message
