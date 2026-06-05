@@ -43,6 +43,8 @@ class MessageSerializer(serializers.ModelSerializer):
 class MessageListSerializer(serializers.ModelSerializer):
     tags = SlugRelatedField(many=True, slug_field="name", read_only=True)
     user = serializers.CharField(source="user.username")
+    likes_count = serializers.IntegerField(source="liked_by.count")
+    is_liked = serializers.SerializerMethodField()
 
     class Meta:
         model = Message
@@ -52,9 +54,20 @@ class MessageListSerializer(serializers.ModelSerializer):
             "created_at",
             "user",
             "tags",
+            "likes_count",
+            "is_liked"
         )
 
+    def get_is_liked(self, obj):
+        user = self.context.get("request").user
 
-class MessageDetailSerializer(MessageSerializer):
+        return user in obj.liked_by.all()
+
+
+class MessageDetailSerializer(MessageListSerializer):
     user = UserSerializer(many=False)
     tags = TagSerializer(many=True)
+    liked_by = UserSerializer(many=True)
+
+    class Meta(MessageListSerializer.Meta):
+        fields = MessageListSerializer.Meta.fields + ("liked_by",)

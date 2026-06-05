@@ -1,5 +1,7 @@
 from rest_framework import viewsets, filters
 from django_filters import rest_framework as drf_filters
+from rest_framework.decorators import action
+from rest_framework.response import Response
 
 from messenger.filters import MessageFilter
 from messenger.models import Message
@@ -11,7 +13,12 @@ from messenger.serializers import (
 
 
 class MessageViewSet(viewsets.ModelViewSet):
-    queryset = Message.objects.select_related("user")
+    queryset = Message.objects.select_related(
+        "user"
+    ).prefetch_related(
+        "liked_by",
+        "tags"
+    )
     filter_backends = [
         filters.SearchFilter,
         filters.OrderingFilter,
@@ -30,4 +37,23 @@ class MessageViewSet(viewsets.ModelViewSet):
         if self.action == "retrieve":
             return MessageDetailSerializer
 
+        if self.action == "like":
+            return MessageListSerializer
+
         return MessageSerializer
+
+    @action(detail=True, methods=["post"], serializer_class=MessageListSerializer)
+    def like(self, request, pk=None):
+        message = self.get_object()
+
+        user = self.request.user
+        if user in message.liked_by.all():
+            message.liked_by.remove(user)
+        else:
+            message.liked_by.add(user)
+
+        message.refresh_from_db(fields=["liked_by"])
+
+        serializer = self.get_serializer(message)
+
+        return Response(serializer.data)
