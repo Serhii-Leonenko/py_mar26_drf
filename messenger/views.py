@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets, filters
 from django_filters import rest_framework as drf_filters
 from rest_framework.decorators import action
@@ -42,7 +43,11 @@ class MessageViewSet(viewsets.ModelViewSet):
 
         return MessageSerializer
 
-    @action(detail=True, methods=["post"], serializer_class=MessageListSerializer)
+    @extend_schema(
+        request=None,
+        responses={200: MessageListSerializer},
+    )
+    @action(detail=True, methods=["post"])
     def like(self, request, pk=None):
         message = self.get_object()
 

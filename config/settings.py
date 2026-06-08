@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     "debug_toolbar",
     "django_filters",
     "rest_framework.authtoken",
+    "drf_spectacular",
     # LOCAL
     "messenger",
     "users"
@@ -126,7 +127,8 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
-    ]
+    ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema'
 }
 
 INTERNAL_IPS = [
@@ -137,3 +139,10 @@ AUTH_USER_MODEL = "users.User"
 
 MEDIA_ROOT = BASE_DIR / "media"
 MEDIA_URL = "/media/"
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Messenger API',
+    'DESCRIPTION': 'TOP',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+}
