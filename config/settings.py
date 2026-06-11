@@ -155,3 +155,13 @@ SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
 }
+
+# CELERY
+CELERY_TIMEZONE = "Europe/Kyiv"
+CELERY_TASK_TRACK_STARTED = True
+CELERY_WORKER_CONCURRENCY = 1
+CELERY_BROKER_URL = "redis://redis:6379/0"
+CELERY_RESULT_BACKEND = "redis://redis:6379/1"
+
+# ONLY FOR TESTING PURPOSES !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# CELERY_TASK_ALWAYS_EAGER = True

@@ -1,3 +1,4 @@
+from django.db import transaction
 from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets, filters
 from django_filters import rest_framework as drf_filters
@@ -11,6 +12,7 @@ from messenger.serializers import (
     MessageDetailSerializer,
     MessageSerializer
 )
+from messenger.tasks import long_task
 
 
 class MessageViewSet(viewsets.ModelViewSet):
@@ -62,3 +64,9 @@ class MessageViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(message)
 
         return Response(serializer.data)
+
+    def perform_create(self, serializer):
+        super().perform_create(serializer)
+
+        # long_time_function()
+        long_task.delay() # trigger celery task

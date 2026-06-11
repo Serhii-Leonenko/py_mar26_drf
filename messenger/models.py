@@ -3,7 +3,7 @@ from django.db import models
 
 
 class Message(models.Model):
-    PREVIEW_LENGTH = 50
+    PREVIEW_LENGTH = 40
 
     text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)

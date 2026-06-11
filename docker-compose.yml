@@ -1,0 +1,18 @@
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+
+  redis:
+    image: redis:alpine
+
+  celery:
+    build: .
+    command: celery -A config worker -l INFO
+
+  flower:
+    build: .
+    command: celery -A config flower --port=5555 --address=0.0.0.0
+    ports:
+      - "5555:5555"
